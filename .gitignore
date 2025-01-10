@@ -39,5 +39,5 @@ jspm_packages/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
-
-appscipt/index.html
+#for appscript file
+appscript/index.html
