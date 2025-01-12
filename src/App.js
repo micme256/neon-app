@@ -1,21 +1,27 @@
 import Home from "./components/Home";
 import Loans from "./components/Loans";
 import More from "./components/More";
-import { Routes, Route } from "react-router-dom";
-import Nav from "./components/Nav";
-import User from "./components/User";
+import { Routes, Route, Navigate } from "react-router-dom";
+import UserLogin from "./components/UserLogin";
+import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/loans" element={<Loans />} />
-        <Route path="/more" element={<More />} />
-        <Route path="/user" element={<User />} />
-        <Route path="*" element={<Home />} />
+        <Route element={<AuthOutlet fallbackPath="/userlogin" />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/loans" element={<Loans />} />
+          <Route path="/more" element={<More />} />
+        </Route>
+        <Route path="/userlogin" element={<UserLogin />} />
+        <Route
+          path="*"
+          element={
+            localStorage.getItem("_auth") ? <Navigate to="/" /> : <UserLogin />
+          }
+        />
       </Routes>
-      <Nav />
     </>
   );
 }

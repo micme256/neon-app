@@ -33,11 +33,6 @@ const Nav = () => {
               <h1>More</h1>
             </Link>
           </li>
-          <li>
-            <Link to="/user">
-              <h1>User</h1>
-            </Link>
-          </li>
         </ul>
       </nav>
     </>
