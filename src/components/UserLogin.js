@@ -3,8 +3,6 @@ import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
 
 const UserLogin = () => {
-  // const [id, setId] = useState("");
-  // const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const signIn = useSignIn();
   const navigate = useNavigate();
@@ -12,14 +10,16 @@ const UserLogin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     setError("");
-    const { id, password } = e.target;
+    const formData = new FormData(e.target);
+    formData.append("requestType", "authenticate");
 
-    fetch(
-      "https://script.google.com/macros/s/AKfycbxVP6Cy7FlQCSbZYDSG9-TNWAZFBKwjlsoBAZ7EunMOW1NLJhZ9re1nilQAa794djHH/exec?memberId=" +
-        encodeURIComponent(id.value) +
-        "&password=" +
-        encodeURIComponent(password.value)
-    )
+    const baseUrl =
+      "https://script.google.com/macros/s/AKfycbwVJ4S8n_8_Fx49sWYydwSDI94h4yhUiw4gCHeXU6_OwrLCUAmkbs3Y9ihGpv8GugzKGA/exec";
+    const params = new URLSearchParams(formData);
+    const url = `${baseUrl}?${params.toString()}`;
+    console.log(url);
+
+    fetch(url)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.status}`);
@@ -27,14 +27,17 @@ const UserLogin = () => {
         return response.json();
       })
       .then((userData) => {
-        console.log(userData);
         signIn({
           auth: {
             token: userData.token,
             type: "Bearer",
           },
           refresh: userData.refreshToken,
-          userState: userData.email,
+          userState: {
+            name: userData.name,
+            id: userData.id,
+            email: userData.email,
+          },
         });
         navigate("/");
       })
@@ -44,32 +47,31 @@ const UserLogin = () => {
   };
 
   return (
-    <>
-      <div>
-        <h1>Welcome back!</h1>
+    <div className="login-container">
+      <form onSubmit={handleLogin}>
+        <h1>Welcome!</h1>
+        <br />
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <form onSubmit={handleLogin}>
-          <label htmlFor="id">Member ID</label>
+        <div className="input-group">
+          <label htmlFor="memberId">Member ID</label>
           <input
             type="text"
-            name="id"
-            // value={id}
-            // onChange={(e) => setId(e.target.value)}
+            name="memberId"
             placeholder="E.g., NEON/XXX"
             required
           />
+          <span className="error-message"></span>
+          <br />
+        </div>
+        <div className="input-group">
           <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">SUBMIT</button>
-        </form>
-      </div>
-    </>
+          <input type="password" name="password" required />
+          <span className="error-message"></span>
+          <br />
+        </div>
+        <button type="submit">LOGIN</button>
+      </form>
+    </div>
   );
 };
 

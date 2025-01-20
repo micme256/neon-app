@@ -1,24 +1,39 @@
-// import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
-import useSignOut from "react-auth-kit/hooks/useSignOut";
-// import DataElement from "./DataElement";
-import { useNavigate } from "react-router-dom";
+import AccountData from "./Home-compents/AccountData";
+import Nav from "./Nav";
+import RecentTransactions from "./Home-compents/RecentTransactions";
+import useApiFetch from "./hooks/useApiFetch";
+
 const Home = () => {
-  const signOut = useSignOut();
-  const navigate = useNavigate();
-  const handleSignOut = () => {
-    if (window.confirm("Are you sure you want to sign out?")) {
-      signOut();
-      navigate("/userlogin");
-    }
-  };
-  // const [data, setData] = useState({});
+  const { sendAnyRequest, loading } = useApiFetch();
+  const formData = new FormData();
+  formData.append("requestType", "fetchData");
+  formData.append(
+    "memberId",
+    JSON.parse(localStorage.getItem("_auth_state")).id
+  );
+  const [accountData, setAccountData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await sendAnyRequest(formData);
+        setAccountData(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
       <Header />
-      {/* {data && <DataElement data={data} />} */}
-      <button onClick={handleSignOut}>SING OUT</button>
+      {loading && <p>Loading</p>}
+      {accountData && <AccountData accountData={accountData} />}
+      <RecentTransactions />
+      <Nav />
     </>
   );
 };

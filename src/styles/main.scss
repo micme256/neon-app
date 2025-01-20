@@ -1,5 +1,29 @@
 * {
   box-sizing: border-box;
+  font-family: "Times New Roman", Times, serif;
+  --alternate-body-color: #f9fafb;
+  --primary-input-color: rgb(0, 132, 255);
+  --error-color: red;
+  --neon-color: #c7f02e;
+  --nav-bar-space: 52px;
+}
+
+body {
+  font-size: 16px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 0;
+  margin: 0;
+}
+.currency {
+  font-size: 12px;
+  font-weight: 200;
 }
 //NAV
 li a {
@@ -7,11 +31,13 @@ li a {
 }
 ul {
   list-style: none;
+  margin: 0;
 }
 .nav-container svg {
   width: 2.5rem;
 }
 .nav-container ul {
+  background-color: white;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -20,6 +46,7 @@ ul {
   margin-top: 0;
   display: flex;
   justify-content: space-around;
+  box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.5);
 }
 .nav-container h1 {
   font-size: 16px;
@@ -34,7 +61,8 @@ ul {
 //HEADER
 .header {
   padding: 2px;
-  background-color: #f9fafb;
+  color: white;
+  background-color: var(--primary-input-color);
   display: flex;
   gap: 5px;
   align-items: center;
@@ -42,6 +70,9 @@ ul {
 .header img,
 .header svg {
   width: 5rem;
+}
+.header svg path {
+  fill: white;
 }
 .header .logo {
   flex: 1;
@@ -55,4 +86,264 @@ ul {
 .header .mId {
   font-size: 12px;
   font-weight: 500;
+}
+
+//ACCOUNT DATA SECTION
+.account-data {
+  padding: 8px;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  background-color: var(--alternate-body-color);
+  gap: 8px;
+}
+.account-data .data-item {
+  // background-color: var(--neon-color);
+  color: black;
+  padding: 8px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.account-data h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--primary-input-color);
+}
+.account-data p {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+//TRANSACTION DATA
+#app > h2 {
+  font-size: 20px;
+}
+.recent-transactions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--nav-bar-space);
+}
+.transaction {
+  background-color: var(--alternate-body-color);
+  display: flex;
+  justify-content: space-between;
+}
+
+.trans-head h3 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 200;
+}
+.trans-head p {
+  font-size: 20px;
+  font-weight: 700;
+}
+.transaction > span {
+  font-size: 14px;
+}
+.trans-head .Deposit {
+  color: #34c759;
+}
+.trans-head .withdraw {
+  color: #ff0000;
+}
+.trans-head .loan {
+  color: #ffc107;
+}
+.trans-head .saving {
+  color: #2196f3;
+}
+.trans-head .shares {
+  color: #7a288a;
+}
+.trans-head .penalty {
+  color: #8f0a1a;
+}
+
+//LOGIN CSS
+.login-container {
+  max-width: 98vw;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #fff;
+}
+.login-container h1 {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+.login-container form {
+  max-width: 460px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+.login-container input {
+  appearance: none;
+  display: block;
+  width: 100%;
+  color: #333;
+  border: 1px solid rgb(180, 180, 180);
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+input:focus {
+  outline: none;
+  border: 1px solid var(--primary-input-color);
+  background-clip: padding-box;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: var(--error-color);
+}
+
+.login-container form button {
+  background-color: var(--primary-input-color);
+  padding: 1rem;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.login-container form button:hover {
+  filter: brightness(110%);
+}
+//LOANS
+.current-loan {
+  max-width: 90vw;
+  margin: 5px auto;
+  background-color: var(--neon-color);
+  border-radius: 1rem;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  display: flex;
+}
+.current-loan-title {
+  font-size: 12px;
+  font-weight: 100;
+}
+.current-loan div {
+  flex: 1;
+}
+.current-loan div > p {
+  font-size: 52px;
+  font-weight: 500;
+}
+.current-loan > span {
+  align-self: flex-end;
+  font-size: 12px;
+}
+.loans-buttons {
+  display: flex;
+  gap: 8px;
+}
+.short-term-loan-btn,
+.long-term-loan-btn {
+  background-color: var(--primary-input-color);
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.short-term-loan-btn:hover,
+.long-term-loan-btn:hover {
+  opacity: 0.8;
+}
+
+.short-term-loan-btn:active,
+.long-term-loan-btn:active {
+  transform: scale(0.9);
+}
+
+.loan-activity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--nav-bar-space);
+}
+.loan-activity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--alternate-body-color);
+  padding: 5px;
+}
+.activity-head > div {
+  color: var(--neon-color);
+  font-size: 12px;
+}
+.activity-head p {
+  font-weight: 700;
+  font-size: 20px;
+}
+.activity-details .due {
+  color: #ff0000;
+}
+.activity-details .pending {
+  color: #f7dc6f;
+}
+.activity-details .approved {
+  color: #34c759;
+}
+.activity-details .active {
+  color: #2196f3;
+}
+.activity-details :first-child,
+.activity-details :last-child {
+  font-size: 12px;
+}
+.activity-details :nth-child(2) {
+  font-size: 14px;
+  font-weight: 700;
+}
+//LOAN FORM
+.loan-form {
+  width: 90vw;
+  margin: 0.25rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+.loan-form input {
+  appearance: none;
+  display: block;
+  width: 100%;
+  color: #333;
+  border: 1px solid rgb(180, 180, 180);
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.25rem;
+}
+
+.loan-form button {
+  background-color: var(--primary-input-color);
+  color: #fff;
+  padding: 12px 24px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-top: 8px;
+}
+
+.loan-form button:hover {
+  opacity: 0.8;
 }

@@ -8,7 +8,7 @@ const handleLogin = async (e) => {
 
   try {
     const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbwnQ3SvnjAex6ksBX1wsBtGq3Dzc4eQ9o7sGPpI9cPvtMcU400k1P-J520l8GhM8hjLPQ/exec?memberId=${id.value}&password=${password.value}`,
+      `https://script.google.com/macros/s/AKfycbyn8KcNAhPCAbxsoMG7y9WZF_-TUwtEhLRFDUjDwKJxj-O3m1hLFHoIJSnvPfYLR3Ewbw/exec?memberId=${id.value}&password=${password.value}`,
       { mode: "cors" }
     );
     if (!response.ok) {
