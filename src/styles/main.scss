@@ -5,7 +5,7 @@
   --primary-input-color: rgb(0, 132, 255);
   --error-color: red;
   --neon-color: #c7f02e;
-  --nav-bar-space: 52px;
+  --nav-bar-space: 60px;
 }
 
 body {
@@ -151,16 +151,16 @@ ul {
 .trans-head .withdraw {
   color: #ff0000;
 }
-.trans-head .loan {
+.trans-head .loans {
   color: #ffc107;
 }
-.trans-head .saving {
+.trans-head .savings {
   color: #2196f3;
 }
 .trans-head .shares {
   color: #7a288a;
 }
-.trans-head .penalty {
+.trans-head .penalties {
   color: #8f0a1a;
 }
 
