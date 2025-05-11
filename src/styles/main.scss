@@ -10,6 +10,7 @@
 
 body {
   font-size: 16px;
+  margin: 0;
 }
 h1,
 h2,
@@ -20,6 +21,19 @@ h6,
 p {
   padding: 0;
   margin: 0;
+}
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #312f2f;
+  width: 100%;
+  height: 30%;
+  z-index: 1;
+}
+.currency-symbol {
+  font-size: 12px;
+  font-weight: 200;
 }
 .currency {
   font-size: 12px;
@@ -61,18 +75,20 @@ ul {
 //HEADER
 .header {
   padding: 2px;
-  color: white;
+  color: black;
   background-color: var(--primary-input-color);
   display: flex;
   gap: 5px;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 .header img,
 .header svg {
   width: 5rem;
 }
 .header svg path {
-  fill: white;
+  fill: black;
 }
 .header .logo {
   flex: 1;
@@ -86,35 +102,6 @@ ul {
 .header .mId {
   font-size: 12px;
   font-weight: 500;
-}
-
-//ACCOUNT DATA SECTION
-.account-data {
-  padding: 8px;
-  max-width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(150px, 1fr));
-  background-color: var(--alternate-body-color);
-  gap: 8px;
-}
-.account-data .data-item {
-  // background-color: var(--neon-color);
-  color: black;
-  padding: 8px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.account-data h3 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--primary-input-color);
-}
-.account-data p {
-  font-size: 20px;
-  font-weight: 700;
 }
 
 //TRANSACTION DATA
@@ -221,129 +208,197 @@ input:focus {
 .login-container form button:hover {
   filter: brightness(110%);
 }
-//LOANS
-.current-loan {
-  max-width: 90vw;
-  margin: 5px auto;
-  background-color: var(--neon-color);
-  border-radius: 1rem;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
-  padding: 5px;
-  display: flex;
-}
-.current-loan-title {
-  font-size: 12px;
-  font-weight: 100;
-}
-.current-loan div {
-  flex: 1;
-}
-.current-loan div > p {
-  font-size: 52px;
-  font-weight: 500;
-}
-.current-loan > span {
-  align-self: flex-end;
-  font-size: 12px;
-}
-.loans-buttons {
-  display: flex;
-  gap: 8px;
-}
-.short-term-loan-btn,
-.long-term-loan-btn {
-  background-color: var(--primary-input-color);
-  color: #fff;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
 
-.short-term-loan-btn:hover,
-.long-term-loan-btn:hover {
-  opacity: 0.8;
-}
-
-.short-term-loan-btn:active,
-.long-term-loan-btn:active {
-  transform: scale(0.9);
-}
-
-.loan-activity-section {
+//RECENT ACTIVITY
+.recent-activity {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: var(--nav-bar-space);
+  gap: 10px;
+  margin-bottom: 60px;
 }
-.loan-activity {
+.activity {
+  font-size: 14px;
+  background-color: white;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: var(--alternate-body-color);
-  padding: 5px;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
-.activity-head > div {
-  color: var(--neon-color);
-  font-size: 12px;
+.activity:hover,
+.activity:focus-within {
+  background-color: var(--focused-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-.activity-head p {
-  font-weight: 700;
+.activity .trans-type {
   font-size: 20px;
+  font-weight: 400;
 }
-.activity-details .due {
-  color: #ff0000;
+.activity .amount {
+  font-size: 20px;
+  font-weight: 700;
 }
-.activity-details .pending {
-  color: #f7dc6f;
+.activity .date {
+  font-size: 14px;
 }
-.activity-details .approved {
+.trans-type.Deposit {
   color: #34c759;
 }
-.activity-details .active {
+.trans-type.withdraw {
+  color: #ff0000;
+}
+.trans-type.loans {
+  color: #ffc107;
+}
+.trans-type.savings {
   color: #2196f3;
 }
-.activity-details :first-child,
-.activity-details :last-child {
-  font-size: 12px;
+.trans-type.shares {
+  color: #7a288a;
 }
-.activity-details :nth-child(2) {
-  font-size: 14px;
-  font-weight: 700;
+.trans-type.penalties {
+  color: #8f0a1a;
 }
-//LOAN FORM
-.loan-form {
-  width: 90vw;
-  margin: 0.25rem auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 0.25rem;
-  background-color: #fff;
+.trans-type.interest {
+  color: #daa520;
 }
-.loan-form input {
-  appearance: none;
-  display: block;
-  width: 100%;
-  color: #333;
-  border: 1px solid rgb(180, 180, 180);
-  background-color: white;
-  padding: 1rem;
-  border-radius: 0.25rem;
+.activity-right .closed {
+  color: #6c757d;
 }
 
-.loan-form button {
-  background-color: var(--primary-input-color);
-  color: #fff;
-  padding: 12px 24px;
-  width: 100%;
+.activity-right .active {
+  color: #198754;
+}
+
+.activity-right .approved {
+  color: #0d6efd;
+}
+
+.activity-right .pending {
+  color: #ffc107;
+}
+//LOANS
+
+.loans-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #0057ff;
+  color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-  margin-top: 8px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+  font-size: 1rem;
+  transition: background 0.2s ease-in-out;
 }
 
-.loan-form button:hover {
+.loans-button:hover {
   opacity: 0.8;
+}
+
+.loans-button:active {
+  transform: scale(0.96);
+}
+
+.external-icon {
+  margin-left: 8px;
+  font-size: 1rem;
+}
+.recent-activity-title {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+// KEY METRICS
+.key-metrics {
+  display: grid;
+  position: relative;
+  z-index: 2;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.key-metrics .data-item {
+  border-radius: 12px;
+  background-color: white;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.key-metrics .data-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.key-metrics .data-item h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.key-metrics .data-item p,
+.key-metrics .data-item .amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #111;
+}
+
+//BALANCE CARD
+.balance-card {
+  position: relative;
+  z-index: 2;
+  max-width: 90vw;
+  margin: 0 auto;
+  margin-top: 1rem;
+  padding: 1rem;
+  text-align: center;
+  background-color: rgb(92, 159, 221);
+  color: white;
+  border-radius: 20px;
+}
+.balance-card > h1 {
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+}
+.balances {
+  display: flex;
+  gap: 1rem;
+}
+.total-shares,
+.account-bal {
+  flex: 1;
+  background-color: rgb(92, 159, 221);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  cursor: default;
+}
+.balance-card .interest {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  background-color: rgb(99, 166, 228);
+  border-radius: 30px;
+  margin-top: 10px;
+}
+.total-shares h1,
+.account-bal h1,
+.interest h1 {
+  font-size: 1.2rem;
 }

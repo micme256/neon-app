@@ -1,8 +1,6 @@
 const fetchData = (formData) => {
   try {
     const { dataType, transactionType, limit, memberId } = formData;
-    const members = namesMapedById();
-
     if (dataType === "transactions") {
       let recentTransactions = [];
       const requiredTransactions = transactionType
@@ -10,12 +8,7 @@ const fetchData = (formData) => {
         : ["loans", "savings", "penalties", "interest", "loanRepay"];
 
       for (const transactionType of requiredTransactions) {
-        const transactionData = getTypeData(
-          transactionType,
-          limit,
-          memberId,
-          members
-        );
+        const transactionData = getTypeData(transactionType, limit, memberId);
 
         if (transactionData instanceof Error) {
           throw transactionData;
@@ -38,14 +31,14 @@ const fetchData = (formData) => {
       }
       return requiredNumb;
     } else {
-      return getGeneralData();
+      return getGeneralData(memberId);
     }
   } catch (error) {
     return error;
   }
 };
 // Retrieve transaction Data
-const getTypeData = (transactionType, limit = 10, memberId, members) => {
+const getTypeData = (transactionType, limit = 10, memberId) => {
   try {
     const { data } = checkSheetData(transactionType);
     const headers = data.shift();
@@ -64,7 +57,6 @@ const getTypeData = (transactionType, limit = 10, memberId, members) => {
       headers.forEach((header, index) => {
         transaction[header] = row[index];
       });
-      transaction.memberName = members.get(memberId) || "Unknown";
       return transaction;
     });
 
@@ -74,18 +66,46 @@ const getTypeData = (transactionType, limit = 10, memberId, members) => {
   }
 };
 
-const getGeneralData = () => {
+const getGeneralData = (memberId) => {
   try {
-    const { data: metricsData } = checkSheetData("metrics");
-    const { data: accountsData } = checkSheetData("accounts");
+    const { data } = checkSheetData("Database");
+    const headers = data[0];
+    const columnIndexes = {
+      memberId: headers.indexOf("No/ID"),
+      savings: headers.indexOf("Total Savings"),
+      loans: headers.indexOf("Loan Bal"),
+      interestEarned: headers.indexOf("Interest Earned"),
+      loanInterest: headers.indexOf("Pending Interest"),
+    };
 
-    const [metricKeys, metricValues] = metricsData;
-    const metricObj = {};
-    metricKeys.forEach((key, index) => {
-      metricObj[key] = metricValues[index];
-    });
+    const memberData = data.find(
+      (row) => row[columnIndexes.memberId] === memberId
+    );
 
-    return { accountsData, metricObj };
+    if (!memberData) {
+      throw new Error("Member not found");
+    }
+
+    return {
+      "Total Savings": memberData[columnIndexes.savings],
+      "Loan Bal": memberData[columnIndexes.loans],
+      "Interest Earned": memberData[columnIndexes.interestEarned],
+      "Pending Interest": memberData[columnIndexes.loanInterest],
+    };
+  } catch (error) {
+    throw new Error(`Error fetching member data: ${error.message}`);
+  }
+};
+
+const checkSheetData = (sheetName) => {
+  try {
+    const sheet =
+      SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+    if (!sheet) {
+      throw new Error(`Transaction '${sheetName}' not found`);
+    }
+    const data = sheet.getDataRange().getValues();
+    return { data, sheet };
   } catch (error) {
     return error;
   }

@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "react-auth-kit";
 import createStore from "react-auth-kit/createStore";
 import App from "./App";
+import { MemberProvider } from "./components/MemberContext";
 
 const store = createStore({
   authName: "_auth",
