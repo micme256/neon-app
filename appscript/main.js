@@ -6,51 +6,60 @@ function doGet() {
 
 const checkRequestType = (formData, requestType) => {
   try {
+    let memberName;
+    if (formData.memberId) {
+      //Check if member exists in database and return Name
+      const members = namesMapedById();
+      memberName = members.get(formData.memberId);
+      if (!memberName) {
+        throw new Error(`Member with ID '${formData.memberId}' not found`);
+      }
+    }
+
+    let result;
     switch (requestType) {
       case "authenticate":
         return authenticateMember(formData);
+      case "addData":
+        result = addData(formData);
+        // transactionEmail(result);
+        break;
+      case "editData":
+        result = editData(formData);
+        break;
+      case "deleteData":
+        result = deleteData(formData);
+        break;
       case "fetchData":
-        if (!formData) {
-          return { data: "no authState" };
-        }
-        const result = fetchData(formData);
-        const resultObj = {
-          status: "success",
-          message: "Data retrieved successfully",
-          data: result,
-        };
-        return JSON.parse(JSON.stringify(resultObj));
+        result = fetchData(formData);
+        break;
       default:
-        return {
-          status: "error",
-          message: "Invalid request type",
-        };
+        throw new Error(`Invalid request type: ${requestType}`);
     }
+    if (result instanceof Error) {
+      throw result;
+    }
+    if (requestType !== "fetchData") {
+      result.memberName = memberName;
+    }
+    const successMsg = {
+      addData: "Data added successfully",
+      editData: "Data edited successfully",
+      deleteData: "Transaction deleted successfully",
+      fetchData: "Data retrieved successfully",
+    };
+    const response = {
+      status: "success",
+      action: requestType,
+      message: successMsg[requestType] || "Operation successfull",
+      data: result,
+    };
+
+    return JSON.parse(JSON.stringify(response));
   } catch (error) {
     return {
       status: "error",
-      message: "Internal server error",
+      message: error.message,
     };
   }
-};
-
-const namesMapedById = () => {
-  const sheetName = "Database";
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-
-  const data = sheet.getDataRange().getValues();
-  const headers = data[0];
-
-  const memberIdIndex = headers.indexOf("No/ID");
-  const memberNameIndex = headers.indexOf("first Name");
-
-  const memberMap = new Map();
-
-  for (let i = 0; i < data.length; i++) {
-    const memberId = data[i][memberIdIndex];
-    const memberName = data[i][memberNameIndex];
-    memberMap.set(memberId, memberName);
-  }
-
-  return memberMap;
 };
