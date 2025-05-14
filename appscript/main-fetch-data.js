@@ -1,4 +1,5 @@
 const fetchData = (formData) => {
+  const members = namesMapedById();
   try {
     const { dataType, transactionType, limit, memberId } = formData;
     if (dataType === "transactions") {
@@ -8,7 +9,12 @@ const fetchData = (formData) => {
         : ["loans", "savings", "penalties", "interest", "loanRepay"];
 
       for (const transactionType of requiredTransactions) {
-        const transactionData = getTypeData(transactionType, limit, memberId);
+        const transactionData = getTypeData(
+          transactionType,
+          limit,
+          memberId,
+          members
+        );
 
         if (transactionData instanceof Error) {
           throw transactionData;
@@ -38,7 +44,7 @@ const fetchData = (formData) => {
   }
 };
 // Retrieve transaction Data
-const getTypeData = (transactionType, limit = 10, memberId) => {
+const getTypeData = (transactionType, limit = 10, memberId, members) => {
   try {
     const { data } = checkSheetData(transactionType);
     const headers = data.shift();
@@ -61,6 +67,7 @@ const getTypeData = (transactionType, limit = 10, memberId) => {
       headers.forEach((header, index) => {
         transaction[header] = row[index];
       });
+      transaction.memberName = members.get(transaction.memberId);
       return transaction;
     });
 

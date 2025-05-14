@@ -1,40 +1,64 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import useFetchData from "./hooks/useFetchData";
+import useFetchFromSheet from "./hooks/useFetchFromSheet";
 
 const MemberContext = createContext({ metricObj: null });
 
 export const useGeneralData = () => useContext(MemberContext);
 
 export const MemberProvider = ({ children }) => {
-  const [memberId, setMemberId] = useState(null);
+  const auth = localStorage.getItem("_auth_state");
+  const memberId = JSON.parse(auth).id;
+
+  const [metricObj, setMetricObj] = useState(null);
+  const [loading, setLoading] = useState(!!memberId);
+  const [error, setError] = useState(null);
+
+  const { fetchRequest } = useFetchFromSheet();
+
   useEffect(() => {
-    const authState = localStorage.getItem("_auth_state");
-    if (authState) {
-      const parsed = JSON.parse(authState);
-      setMemberId(parsed.id);
-    }
-  }, [memberId]);
+    const fetchMetrics = async () => {
+      if (!memberId) return;
 
-  const {
-    data: generalData,
-    loading,
-    error,
-  } = useFetchData(memberId ? { memberId } : null);
+      setLoading(true);
+      try {
+        const response = await fetchRequest({
+          memberId,
+        });
+        if (response?.status !== "success") {
+          throw new Error(response?.message || "Unknown error fetching data");
+        }
+        setMetricObj(response.data);
+        setError(null);
+      } catch (err) {
+        setError(err.message || "Unexpected error occurred");
+        setMetricObj(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const metricObj = generalData || {};
+    fetchMetrics();
+  }, []);
 
-  if (!memberId) return children;
-  if (loading) return <div className="loading-screen">Loading data...</div>;
-  if (error)
+  if (!memberId) return <>{children}</>;
+
+  if (loading) {
+    return <div className="loading-screen">Loading data...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="loading-screen error">Error loading data: {error}</div>
+    );
+  }
+
+  if (!metricObj) {
     return (
       <div className="loading-screen error">
-        Error loading data: {error.message || "Unknown error"}
+        Failed to load member account data.
       </div>
     );
-  if (!metricObj)
-    return (
-      <div className="loading-screen error">Failed to load account data.</div>
-    );
+  }
 
   return (
     <MemberContext.Provider value={{ metricObj }}>

@@ -14,7 +14,7 @@ const More = () => {
   };
   return (
     <>
-      <button onClick={handleSignOut}>SING OUT</button>
+      <button onClick={handleSignOut}>SIGN OUT</button>
       <Nav />
     </>
   );

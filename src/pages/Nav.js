@@ -1,7 +1,9 @@
-import React from "react";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { Link } from "react-router-dom";
 
 const Nav = () => {
+  const auth = useAuthUser();
+  const admin = auth.role !== "user";
   return (
     <>
       <nav className="nav-container">
@@ -33,6 +35,17 @@ const Nav = () => {
               <h1>More</h1>
             </Link>
           </li>
+          {admin && (
+            <li>
+              <Link to="/admin-dashboard">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <title>view-dashboard</title>
+                  <path d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z" />
+                </svg>
+                <h1>Admin</h1>
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </>
