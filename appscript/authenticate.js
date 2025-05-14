@@ -8,6 +8,7 @@ function authenticateMember(formData) {
   const passwordIndex = headers.indexOf("Password");
   const nameIndex = headers.indexOf("Name");
   const emailIndex = headers.indexOf("email");
+  const postIndex = headers.indexOf("Position");
 
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
@@ -30,6 +31,12 @@ function authenticateMember(formData) {
           id: row[memberIdIndex],
           name: row[nameIndex],
           email: row[emailIndex],
+          role:
+            row[postIndex] === "SECRETARY"
+              ? "editor"
+              : row[postIndex] === "MEMBER"
+              ? "user"
+              : "admin",
           token: token,
         },
       };

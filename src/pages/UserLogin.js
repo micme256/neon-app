@@ -40,9 +40,10 @@ const UserLogin = () => {
           name: userData.name,
           id: userData.id,
           email: userData.email,
+          role: userData.role,
         },
       });
-      navigate("/");
+      navigate(userData.role === "user" ? "/" : "/admin-dashboard");
     } catch (err) {
       setError(err.message || "Unexpected error occurred");
     } finally {
