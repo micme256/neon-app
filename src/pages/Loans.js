@@ -21,7 +21,7 @@ const Loans = () => {
     dataType: "transactions",
     transactionType: "loans",
     memberId: JSON.parse(localStorage.getItem("_auth_state")).id,
-    limit: 10,
+    limit: 15,
   });
   const memberId = JSON.parse(localStorage.getItem("_auth_state")).id;
   const memberName = JSON.parse(localStorage.getItem("_auth_state")).name;
