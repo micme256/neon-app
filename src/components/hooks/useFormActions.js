@@ -69,14 +69,11 @@ const useFormActions = () => {
   const processLoanFormData = (formData) => {
     formData.forLoanWithId = formData.transactionId;
     delete formData.transactionId;
-    const interest = formData.pendingInterest;
-    if (interest > 0) {
-      formData.amount = formData.amountPaid - interest; //INTEREST DEDUCTED FIRST
-      if (formData.amount <= 0) {
-        //IF ONLY INTEREST IS PAID
-        formData.transactionType = "interest";
-        formData.amount = formData.amountPaid;
-      }
+    formData.amount = formData.amountPaid;
+    if (formData.amountPaid <= 0) {
+      //IF ONLY INTEREST IS PAID
+      formData.transactionType = "interest";
+      formData.amount = formData.interest;
     }
     return formData;
   };

@@ -26,15 +26,26 @@ const addData = (formData) => {
       }
     });
     // ⏪ Recurse interest repayment if it's a loanRepay transaction
-    if (transactionType === "loanRepay" && formData.pendingInterest) {
-      const interestForm = {
-        ...formData,
-        transactionType: "interest",
-        amount: formData.pendingInterest,
-      };
-      const interestData = addData(interestForm);
-      addedData.interest = interestData.amount;
-      addedData.interestTransId = interestData.transactionId;
+    if (transactionType === "loanRepay") {
+      const pendingInterest = formData.pendingInterest;
+      //When the loan balance changes, any unpaid interest is recorded somewhere and continuing interest calculated based on remaining balance
+      if (pendingInterest > 0 && formData.loanType === "instant-loan") {
+        recordInterestArrears({
+          ...formData,
+          transactionType: "interestArrears",
+          amount: pendingInterest,
+        });
+      }
+      if (formData.interest > 0) {
+        const interestForm = {
+          ...formData,
+          transactionType: "interest",
+          amount: formData.interest,
+        };
+        const interestData = addData(interestForm);
+        addedData.interest = interestData.amount;
+        addedData.interestTransId = interestData.transactionId;
+      }
     }
     addedData.transactionType = transactionType;
 
@@ -42,4 +53,8 @@ const addData = (formData) => {
   } catch (error) {
     return error;
   }
+};
+
+const recordInterestArrears = (data) => {
+  addData(data);
 };
