@@ -4,10 +4,14 @@ import { formatDate } from "../helper-functions/formatDate";
 import useFormActions from "../hooks/useFormActions";
 import { formatAmount } from "../helper-functions/formatAmount";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const RecentActivityAdmn = ({ recentActivity }) => {
   const auth = useAuthUser();
   const editor = auth.role === "editor";
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [actionButtonsState, setActionButtonsState] = useState({});
 
@@ -69,7 +73,7 @@ const RecentActivityAdmn = ({ recentActivity }) => {
                   deleteTransaction(activity);
                 }}
               >
-                ⏪ Delete
+                Delete
               </button>
               <button
                 key={`${activity.transactionId}-edit`}
@@ -79,7 +83,7 @@ const RecentActivityAdmn = ({ recentActivity }) => {
                   loadEditor(activity);
                 }}
               >
-                ✏ Edit
+                Edit
               </button>
               {(activity?.status === "active" ||
                 activity?.status === "overdue") && (
@@ -91,9 +95,24 @@ const RecentActivityAdmn = ({ recentActivity }) => {
                     loadLoanClearer(activity);
                   }}
                 >
-                  Clear Loan
+                  Pay
                 </button>
               )}
+              {location.pathname === "/admin-loans" &&
+                activity?.transactionType === "loans" && (
+                  <button
+                    key={`${activity.transactionId}-details`}
+                    className="trans-details-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate("/admin-loans/transaction-details", {
+                        state: { activity: activity },
+                      });
+                    }}
+                  >
+                    Details
+                  </button>
+                )}
             </div>
           )}
         </div>

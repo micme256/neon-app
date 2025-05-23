@@ -15,6 +15,8 @@ import Transactions from "./pages/adimin-pages/Transactions";
 import DataFeedback from "./components/admin-pages-comps/DataFeedback";
 import TransEditing from "./pages/adimin-pages/TransEditing";
 import LoanClearing from "./pages/adimin-pages/LoanClearing";
+import LoanActivity from "./components/admin-pages-comps/LoanActivity";
+import TransactionDetails from "./pages/adimin-pages/TransactionDetails";
 
 function App() {
   return (
@@ -53,7 +55,13 @@ function App() {
             element={<RoleBasedAccess allowedRoles={["admin", "editor"]} />}
           >
             <Route path="admin-dashboard" element={<Dashboard />} />
-            <Route path="admin-loans" element={<LoansAdmin />} />
+            <Route path="admin-loans" element={<LoansAdmin />}>
+              <Route index element={<LoanActivity />} />
+              <Route
+                path="transaction-details"
+                element={<TransactionDetails />}
+              />
+            </Route>
             <Route path="transactions" element={<Transactions />} />
           </Route>
           <Route element={<RoleBasedAccess allowedRoles={["editor"]} />}>

@@ -58,3 +58,24 @@ const convertToDate = (input) => {
   const date = new Date(year, month, day);
   return isNaN(date.getTime()) ? null : date;
 };
+
+//Sort data
+const sortData = (data) => {
+  const statusOrder = {
+    pending: 0,
+    approved: 1,
+    overdue: 2,
+    active: 3,
+  };
+
+  return data.sort((a, b) => {
+    const aRank = statusOrder[a.status] ?? 4;
+    const bRank = statusOrder[b.status] ?? 4;
+
+    if (aRank === bRank) {
+      return new Date(b.transactionDate) - new Date(a.transactionDate);
+    }
+
+    return aRank - bRank;
+  });
+};

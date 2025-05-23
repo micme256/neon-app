@@ -18,12 +18,12 @@ const Transactions = () => {
 
   return (
     <>
+      {editor && <TransactionForm />}
       {loading && <p className="loading">Loading...</p>}
       {error && <p className="error">Error: {error}</p>}
       {transactions && transactions.length > 0 && (
         <RecentActivityAdmn recentActivity={transactions} />
       )}
-      {editor && <TransactionForm />}
       <AdminNav />
     </>
   );
