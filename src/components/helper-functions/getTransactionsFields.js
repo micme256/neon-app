@@ -59,6 +59,7 @@ export function getTransactionFields(members, transactionType = "default") {
         readOnly: true,
       },
       { type: "number", name: "amountPaid", label: "Amount paid" },
+      { type: "number", name: "interest", label: "Interest paid" },
       { type: "date", name: "transactionDate", label: "Date" },
     ],
     default: [
