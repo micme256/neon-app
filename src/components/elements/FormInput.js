@@ -46,6 +46,7 @@ const FormInput = ({
         readOnly={readOnly}
         className={className}
         onChange={handleChange}
+        required
       />
     </label>
   );
