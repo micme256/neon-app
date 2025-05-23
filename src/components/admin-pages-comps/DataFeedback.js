@@ -48,7 +48,7 @@ const DataFeedback = () => {
               ✏️ Edit
             </button>
           )}
-          <button onClick={() => navigate("/")}>✅ OK</button>
+          <button onClick={() => navigate("/admin-dashboard")}>✅ OK</button>
         </div>
       </div>
     </div>
