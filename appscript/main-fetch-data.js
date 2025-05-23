@@ -1,7 +1,8 @@
 const fetchData = (formData) => {
   const members = namesMapedById();
   try {
-    const { dataType, transactionType, limit, memberId } = formData;
+    const { dataType, transactionType, limit, memberId, transactionId } =
+      formData;
     if (dataType === "transactions") {
       let recentTransactions = [];
       const requiredTransactions = transactionType
@@ -11,8 +12,9 @@ const fetchData = (formData) => {
       for (const transactionType of requiredTransactions) {
         const transactionData = getTypeData(
           transactionType,
-          limit,
+          // limit,
           memberId,
+          transactionId,
           members
         );
 
@@ -26,11 +28,9 @@ const fetchData = (formData) => {
         recentTransactions.push(...transactionData);
       }
 
-      recentTransactions.sort(
-        (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
-      );
+      const sortedTransactions = sortData(recentTransactions);
 
-      const requiredNumb = recentTransactions.slice(0, limit);
+      const requiredNumb = sortedTransactions.slice(0, limit);
 
       if (requiredNumb.length === 0) {
         throw new Error("No records found");
@@ -44,23 +44,38 @@ const fetchData = (formData) => {
   }
 };
 // Retrieve transaction Data
-const getTypeData = (transactionType, limit = 10, memberId, members) => {
+const getTypeData = (
+  transactionType,
+  // limit = 10,
+  memberId,
+  transactionId,
+  members
+) => {
   try {
     const { data } = checkSheetData(transactionType);
     const headers = data.shift();
     const memberIdColumnIndex = headers.indexOf("memberId");
-    const dateColumnIndex = headers.indexOf("transactionDate");
+    const transactionDateColIndex = headers.indexOf("transactionDate");
+    const transactionIdColIndex = headers.indexOf("transactionId");
 
-    let memberData = data;
+    let requiredData = data;
 
     if (memberId) {
-      memberData = data.filter(
+      requiredData = requiredData.filter(
         (record) => record[memberIdColumnIndex] === memberId
       );
     }
-    const dateSorted = memberData.sort(
-      (a, b) => new Date(b[dateColumnIndex]) - new Date(a[dateColumnIndex])
-    );
+    if (transactionId) {
+      requiredData = requiredData.filter(
+        (record) => record[transactionIdColIndex] === transactionId
+      );
+    }
+    const dateSorted = requiredData.sort((a, b) => {
+      return (
+        new Date(b[transactionDateColIndex]) -
+        new Date(a[transactionDateColIndex])
+      );
+    });
 
     const structuredData = dateSorted.map((row) => {
       const transaction = {};
@@ -71,7 +86,7 @@ const getTypeData = (transactionType, limit = 10, memberId, members) => {
       return transaction;
     });
 
-    return structuredData.slice(0, limit);
+    return structuredData;
   } catch (error) {
     throw new Error(`Error fetching ${transactionType} data: ${error.message}`);
   }
