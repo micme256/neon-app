@@ -39,6 +39,23 @@ p {
   font-size: 12px;
   font-weight: 200;
 }
+.loading {
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+}
+
+.error {
+  color: #ff3737;
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ff3737;
+  border-radius: 5px;
+  background-color: #ffe6e6;
+}
+
 //NAV
 li a {
   text-decoration: none;
@@ -214,7 +231,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 1rem;
+  margin-bottom: var(--nav-bar-space);
 }
 .activity {
   background-color: var(--alternate-body-color);
@@ -273,6 +290,9 @@ input:focus {
 }
 .trans-clear-btn {
   background: #6c757d;
+}
+.trans-details-btn {
+  background: #676f75;
 }
 
 .activity-right .closed {
@@ -560,7 +580,7 @@ input:focus {
   background-color: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--nav-bar-space);
 }
 
 .contribution table {
@@ -621,4 +641,70 @@ ul {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+}
+
+//TRANSACTION DETAILS PAGE
+.transaction-details {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  max-width: 600px;
+  margin: 1rem auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: var(--nav-bar-space);
+}
+
+.transaction-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-details td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-details h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.link-button:hover {
+  color: darkblue;
+}
+
+.approve-btn,
+.reject-btn {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  color: white;
+}
+
+.approve-btn {
+  background-color: #28a745;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+}
+.loan-approval-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #f5f5f5;
+  border-left: 5px solid #2196f3;
+  font-weight: 500;
 }
