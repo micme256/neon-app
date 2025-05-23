@@ -32,7 +32,9 @@ function authenticateMember(formData) {
           name: row[nameIndex],
           email: row[emailIndex],
           role:
-            row[postIndex] === "SECRETARY"
+            row[postIndex] === "SECRETARY" ||
+            row[postIndex] === "TREASURER" ||
+            row[postIndex] === "LOANS OFFICER"
               ? "editor"
               : row[postIndex] === "MEMBER"
               ? "user"
